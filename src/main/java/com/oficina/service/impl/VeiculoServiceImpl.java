@@ -1,5 +1,6 @@
 package com.oficina.service.impl;
 
+import com.oficina.dto.VeiculoDetalheResponseDTO;
 import com.oficina.dto.VeiculoRequestDTO;
 import com.oficina.dto.VeiculoResponseDTO;
 import com.oficina.entity.Veiculo;
@@ -7,6 +8,7 @@ import com.oficina.entity.VeiculoStatus;
 import com.oficina.exception.BusinessException;
 import com.oficina.exception.ResourceNotFoundException;
 import com.oficina.entity.ItemStatus;
+import com.oficina.mapper.VeiculoDetalheMapper;
 import com.oficina.mapper.VeiculoMapper;
 import com.oficina.repository.VeiculoRepository;
 import com.oficina.repository.ItemRepository;
@@ -88,6 +90,15 @@ public class VeiculoServiceImpl implements VeiculoService {
         veiculoRepository.delete(veiculo);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public VeiculoDetalheResponseDTO buscarDetalhe(Long veiculoId) {
+
+        Veiculo veiculo = veiculoRepository.findByIdWithItens(veiculoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Veículo não encontrado"));
+
+        return VeiculoDetalheMapper.toResponse(veiculo);
+    }
     /*
      * ==============================
      * MÉTODOS PRIVADOS DE REGRA

@@ -1,5 +1,6 @@
 package com.oficina.service;
 
+import com.oficina.dto.VeiculoDetalheResponseDTO;
 import com.oficina.dto.VeiculoRequestDTO;
 import com.oficina.dto.VeiculoResponseDTO;
 
@@ -14,4 +15,6 @@ public interface VeiculoService {
     VeiculoResponseDTO atualizarStatus(Long id, String novoStatus);
 
     void excluir(Long veiculoId);
+
+    VeiculoDetalheResponseDTO buscarDetalhe(Long veiculoId);
 }

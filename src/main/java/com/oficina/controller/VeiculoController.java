@@ -1,5 +1,6 @@
 package com.oficina.controller;
 
+import com.oficina.dto.VeiculoDetalheResponseDTO;
 import com.oficina.dto.VeiculoRequestDTO;
 import com.oficina.dto.VeiculoResponseDTO;
 import com.oficina.service.VeiculoService;
@@ -24,15 +25,12 @@ public class VeiculoController {
 
     @PostMapping
     public ResponseEntity<VeiculoResponseDTO> criar(
-        @Valid 
-        @RequestBody 
-        VeiculoRequestDTO dto
-    ) {
+            @Valid @RequestBody VeiculoRequestDTO dto) {
 
-            VeiculoResponseDTO response = veiculoService.criarVeiculo(dto);
+        VeiculoResponseDTO response = veiculoService.criarVeiculo(dto);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
     @GetMapping
     public ResponseEntity<List<VeiculoResponseDTO>> listar() {
@@ -44,12 +42,12 @@ public class VeiculoController {
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<VeiculoResponseDTO> atualizarStatus(
-        @PathVariable Long id,
-        @RequestParam String status) {
-            
-            VeiculoResponseDTO response = veiculoService.atualizarStatus(id, status);
+            @PathVariable Long id,
+            @RequestParam String status) {
 
-            return ResponseEntity.ok(response);
+        VeiculoResponseDTO response = veiculoService.atualizarStatus(id, status);
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
@@ -58,5 +56,13 @@ public class VeiculoController {
         veiculoService.excluir(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/detalhe")
+    public ResponseEntity<VeiculoDetalheResponseDTO> detalhar(@PathVariable Long id) {
+
+        VeiculoDetalheResponseDTO response = veiculoService.buscarDetalhe(id);
+
+        return ResponseEntity.ok(response);
     }
 }
