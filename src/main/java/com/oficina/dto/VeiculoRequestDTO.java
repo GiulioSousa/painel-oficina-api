@@ -7,10 +7,9 @@ import jakarta.validation.constraints.Size;
 public class VeiculoRequestDTO {
 
     @NotBlank(message = "Placa é obrigatória")
-    @Size(min = 7, max = 7, message = "A placa deve ter 7 caracteres")
     @Pattern(
-        regexp = "^[A-Z0-9]{7}$", 
-        message = "Placa deve ser no formato ABC1234"
+        regexp = "^[a-zA-Z0-9]{7}$", 
+        message = "A placa deve ter 7 caracteres entre letras e números"
         )
     private String placa;
 
