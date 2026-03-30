@@ -75,7 +75,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         item.setDescricao(dto.getDescricao());
-        item.setTipo(ItemTipo.valueOf(dto.getTipo()));
+        item.setTipo(dto.getTipo());
 
         item = itemRepository.save(item);
 

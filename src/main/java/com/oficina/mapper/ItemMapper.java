@@ -4,7 +4,6 @@ import com.oficina.dto.ItemRequestDTO;
 import com.oficina.dto.ItemResponseDTO;
 import com.oficina.entity.Item;
 import com.oficina.entity.ItemStatus;
-import com.oficina.entity.ItemTipo;
 
 public class ItemMapper {
 
@@ -13,7 +12,7 @@ public class ItemMapper {
         Item item = new Item();
 
         item.setDescricao(dto.getDescricao());
-        item.setTipo(ItemTipo.valueOf(dto.getTipo()));
+        item.setTipo(dto.getTipo());
         item.setStatus(ItemStatus.PENDENTE);
 
         return item;
