@@ -9,12 +9,14 @@ public class ApiError {
     private int status;
     private String message;
     private List<String> errors;
+    private String stackTrace;
     
-    public ApiError(int status, String message, List<String> errors) {
+    public ApiError(int status, String message, List<String> errors, String stackTrace) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.message = message;
         this.errors = errors;
+        this.stackTrace = stackTrace;
     }
 
     public LocalDateTime getTimestamp() {
@@ -31,5 +33,9 @@ public class ApiError {
 
     public List<String> getErrors() {
         return errors;
+    }
+
+    public String getStackTrace() {
+        return stackTrace;
     }
 }
