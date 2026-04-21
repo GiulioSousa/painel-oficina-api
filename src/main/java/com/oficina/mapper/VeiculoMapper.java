@@ -25,6 +25,7 @@ public class VeiculoMapper {
         dto.setStatus(veiculo.getStatus().name());
         dto.setCreatedAt(veiculo.getCreatedAt());
         dto.setArchived(veiculo.getArchived());
+        dto.setTotalItens(veiculo.getItens() != null ? veiculo.getItens().size() : 0);
 
         return dto;
     }

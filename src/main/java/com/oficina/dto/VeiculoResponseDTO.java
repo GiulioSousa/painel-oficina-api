@@ -10,6 +10,7 @@ public class VeiculoResponseDTO {
     private String status;
     private LocalDateTime createdAt;
     private boolean archived;
+    private Integer totalItens;
 
     public Long getId() {
         return id;
@@ -57,6 +58,14 @@ public class VeiculoResponseDTO {
 
     public void setArchived(boolean archived) {
         this.archived = archived;
+    }
+
+    public Integer getTotalItens() {
+        return totalItens;
+    }
+
+    public void setTotalItens(Integer totalItens) {
+        this.totalItens = totalItens;
     }
 }
 
