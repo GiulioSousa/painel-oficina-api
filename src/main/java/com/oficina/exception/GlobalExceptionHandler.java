@@ -67,17 +67,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiError> handleRuntimeDeliverCarReady(RuntimeException ex) {
+    public ResponseEntity<ApiError> handleRuntime(RuntimeException ex) {
         StringWriter sw = new StringWriter();
         ex.printStackTrace(new PrintWriter(sw));
 
         ApiError error = new ApiError(
-            HttpStatus.BAD_REQUEST.value(), 
-            ex.getMessage(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+            "Erro interno",
             List.of(),
             sw.toString());
 
-            return ResponseEntity.badRequest().body(error);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
     @ExceptionHandler(Exception.class)

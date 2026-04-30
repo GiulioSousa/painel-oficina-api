@@ -16,7 +16,7 @@ public class VeiculoRequestDTO {
     private String placa;
 
     @NotBlank(message = "Descrição do veículo é obrigatória")
-    @Size(max = 100, message = "A descrição deve ter no máximo 120 caracteres")
+    @Size(max = 120, message = "A descrição deve ter no máximo 120 caracteres")
     private String descricao;
 
     private VeiculoStatus status;
