@@ -48,9 +48,9 @@ public class VeiculoServiceImpl implements VeiculoService {
         validarPlacaUnica(placaNormalizada);
 
         Veiculo veiculo = VeiculoMapper.toEntity(dto);
+        veiculo.setPlaca(placaNormalizada);
 
         veiculo = veiculoRepository.save(veiculo);
-        veiculo.setPlaca(placaNormalizada);
 
         return VeiculoMapper.toResponse(veiculo);
     }
@@ -60,16 +60,16 @@ public class VeiculoServiceImpl implements VeiculoService {
     public PageResponseDTO<VeiculoResponseDTO> listarVeiculos(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        
+
         Page<Veiculo> pagina = veiculoRepository.findAll(pageable);
-        
+
         List<VeiculoResponseDTO> content = pagina.getContent()
                 .stream()
                 .sorted(Comparator
-                    .comparing(Veiculo::getUpdatedAt).reversed())
+                        .comparing(Veiculo::getUpdatedAt).reversed())
                 .map(VeiculoMapper::toResponse)
                 .toList();
-        
+
         return new PageResponseDTO<>(content, pagina.getTotalPages());
     }
 
@@ -106,33 +106,39 @@ public class VeiculoServiceImpl implements VeiculoService {
 
         return VeiculoDetalheMapper.toResponse(veiculo);
     }
-    
+
     @Override
     public VeiculoResponseDTO arquivar(Long veiculoId, VeiculoArchivedRequestDTO dto) {
 
         Veiculo veiculo = buscarOuFalhar(veiculoId);
-        
+
         veiculo.setArchived(dto.getArchived());
-        
+
         Veiculo veiculoSalvo = veiculoRepository.save(veiculo);
-        
+
         return VeiculoMapper.toResponse(veiculoSalvo);
     }
-    
+
     @Override
     public VeiculoResponseDTO atualizarVeiculo(Long veiculoId, VeiculoRequestDTO dto) {
 
         Veiculo veiculo = buscarOuFalhar(veiculoId);
+
+        String placaNormalizada = normalizarPlaca(dto.getPlaca());
         
-        veiculo.setPlaca(normalizarPlaca(dto.getPlaca()));
+        if (!veiculo.getPlaca().equals(placaNormalizada)) {
+            validarPlacaUnica(placaNormalizada);
+        }
+
+        veiculo.setPlaca(placaNormalizada);
         veiculo.setDescricao(dto.getDescricao());
         veiculo.setStatus(dto.getStatus());
-        
+
         Veiculo veiculoSalvo = veiculoRepository.save(veiculo);
-        
+
         return VeiculoMapper.toResponse(veiculoSalvo);
     }
-    
+
     /*
      * ==============================
      * MÉTODOS PRIVADOS DE REGRA
@@ -176,7 +182,5 @@ public class VeiculoServiceImpl implements VeiculoService {
             throw new BusinessException("Status inválido");
         }
     }
-
-
 
 }
