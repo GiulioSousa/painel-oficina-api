@@ -1,6 +1,8 @@
 package com.oficina.config;
 
 import com.oficina.service.impl.UsuarioDetalheService;
+
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,11 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +41,7 @@ public class SecurityConfig {
         var authProvider = new DaoAuthenticationProvider(usuarioDetalheService);
         authProvider.setPasswordEncoder(passwordEncoder());
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
@@ -41,8 +49,12 @@ public class SecurityConfig {
                 .authenticationProvider(authProvider)
                 .formLogin(form -> form
                         .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/swagger-ui/index.html", true)
-                        .failureUrl("/login?error=true")
+                        .successHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        })
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
@@ -54,5 +66,18 @@ public class SecurityConfig {
                         .sessionRegistry(sessionRegistry()));
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:5173")); // origem do Vite
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true); // obrigatório para cookie de sessão
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
