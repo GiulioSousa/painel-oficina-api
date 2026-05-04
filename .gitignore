@@ -35,3 +35,4 @@ build/
 ### Others ###
 /test-api
 .claude/
+src/main/resources/application-local.properties
