@@ -10,5 +10,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByVeiculoId(Long veiculoId);
 
     long countByVeiculoIdAndStatus(Long veiculoId, ItemStatus status);
+
+    long countByVeiculoId(Long veiculoId);
 }
 

@@ -10,9 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
-    
+
     Optional<Veiculo> findByPlaca(String placa);
-    
+
     @Query("SELECT v FROM Veiculo v LEFT JOIN FETCH v.itens WHERE v.id = :id")
     Optional<Veiculo> findByIdWithItens(@Param("id") Long id);
 
@@ -21,4 +21,7 @@ public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
     List<Veiculo> findAllByOrderByStatusAscUpdatedAtDesc();
 
     Page<Veiculo> findAll(Pageable pageable);
+
+    @Query("SELECT COUNT(i) FROM Item i WHERE i.veiculo.id = :veiculoId")
+    int countItensByVeiculoId(@Param("veiculoId") Long veiculoId);
 }

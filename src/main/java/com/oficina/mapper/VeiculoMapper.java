@@ -12,11 +12,11 @@ public class VeiculoMapper {
         veiculo.setPlaca(dto.getPlaca());
         veiculo.setDescricao(dto.getDescricao());
         veiculo.setStatus(VeiculoStatus.PENDENTE);
-        
+
         return veiculo;
     }
 
-    public static VeiculoResponseDTO toResponse(Veiculo veiculo) {
+    public static VeiculoResponseDTO toResponse(Veiculo veiculo, int totalItens) {
         VeiculoResponseDTO dto = new VeiculoResponseDTO();
 
         dto.setId(veiculo.getId());
@@ -25,8 +25,7 @@ public class VeiculoMapper {
         dto.setStatus(veiculo.getStatus().name());
         dto.setCreatedAt(veiculo.getCreatedAt());
         dto.setArchived(veiculo.getArchived());
-        dto.setTotalItens(veiculo.getItens() != null ? veiculo.getItens().size() : 0);
-
+        dto.setTotalItens(totalItens);
         return dto;
     }
 }
