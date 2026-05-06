@@ -68,6 +68,10 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = buscarItemOuFalhar(itemId);
 
+        if (item.getStatus() == ItemStatus.PRONTO) {
+            throw new BusinessException("Não é possível atualizar um item concluído");
+        }
+
         item.setDescricao(dto.getDescricao());
         item.setTipo(dto.getTipo());
 
