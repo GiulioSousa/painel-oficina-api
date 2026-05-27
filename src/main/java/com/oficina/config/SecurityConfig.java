@@ -25,11 +25,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final UsuarioDetalheService usuarioDetalheService;
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Bean
     public SessionRegistry sessionRegistry() {
@@ -39,7 +35,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         var authProvider = new DaoAuthenticationProvider(usuarioDetalheService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder);
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
@@ -66,6 +62,9 @@ public class SecurityConfig {
                         .logoutUrl("/auth/logout")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                        })
                         .permitAll())
                 .sessionManagement(session -> session
                         .maximumSessions(1)
@@ -84,7 +83,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // origem do Vite
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://oficina.keystech.dev")); // origem do Vite
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // obrigatório para cookie de sessão
